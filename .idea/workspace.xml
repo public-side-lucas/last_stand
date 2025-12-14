@@ -1,4 +1,160 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PropertiesComponent">{}</component>
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="94233cb7-780d-40bf-991d-cedb8570f232" name="Changes" comment="feat: setting project&#10;&#10;- **React 19** - UI framework&#10;- **TypeScript** - Type safety&#10;- **Three.js** - 3D rendering engine&#10;- **Vite** - Build tool and dev server&#10;- **Zustand** - State management&#10;- **Tailwind CSS** - Styling">
+      <change afterPath="$PROJECT_DIR$/.eslintignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.eslintrc.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/CLAUDE.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/eslint.config.mjs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/postcss.config.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/entities/bullet/index.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/entities/bullet/lib/updateBulletPosition.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/entities/bullet/model/bullet.store.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/entities/bullet/model/types.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/entities/game/index.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/entities/game/model/game.store.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/entities/game/model/types.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/entities/monster/index.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/entities/monster/lib/__tests__/moveTowardsPlayer.test.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/entities/monster/lib/createMonster.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/entities/monster/lib/moveTowardsPlayer.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/entities/monster/model/monster.store.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/entities/monster/model/types.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/entities/player/index.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/entities/player/lib/createPlayer.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/entities/player/lib/updatePlayerRotation.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/entities/player/model/player.store.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/entities/player/model/types.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/features/collision-detection/index.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/features/collision-detection/lib/__tests__/checkBulletCollision.test.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/features/collision-detection/lib/checkBulletCollision.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/features/collision-detection/lib/checkPlayerCollision.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/features/monster-spawning/index.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/features/monster-spawning/lib/getSpawnPosition.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/features/scoring/index.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/features/shooting/index.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/features/shooting/lib/__tests__/findNearestTarget.test.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/features/shooting/lib/createBullet.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/features/shooting/lib/findNearestTarget.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/game/GamePage.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/game/index.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/shared/config/constants.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/shared/index.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/shared/lib/hooks/useAnimationFrame.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/shared/lib/math/__tests__/vector.test.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/shared/lib/math/vector.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/shared/lib/three/camera.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/shared/lib/three/lights.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/shared/lib/three/renderer.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/shared/lib/three/scene.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/shared/types/common.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/widgets/game-canvas/index.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/widgets/game-canvas/lib/useGameLoop.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/widgets/game-canvas/ui/GameCanvas.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/widgets/game-over-screen/index.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/widgets/game-over-screen/ui/GameOverScreen.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/widgets/score-board/index.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/widgets/score-board/ui/ScoreBoard.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tailwind.config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tsconfig.json" beforeDir="false" afterPath="$PROJECT_DIR$/tsconfig.json" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "side-lucas"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/public-side-lucas/last_stand.git",
+    "accountId": "f5f46b10-3caa-4388-a839-39428fed3377"
+  }
+}]]></component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 3
+}]]></component>
+  <component name="ProjectId" id="36ouTaA1ftAxE6NoM8ZB2rUKIGh" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "dart.analysis.tool.window.visible": "false",
+    "git-widget-placeholder": "main",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_interpreter_path": "node",
+    "nodejs_package_manager_path": "npm",
+    "ts.external.directory.path": "/Users/storelink/Documents/byungmin/last_stand/node_modules/typescript/lib",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RunManager" selected="npm.npm start">
+    <configuration name="Debug Application" type="JavascriptDebugType" uri="http://localhost:3000">
+      <method v="2" />
+    </configuration>
+    <configuration name="npm start" type="js.build_tools.npm">
+      <package-json value="$PROJECT_DIR$/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="start" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-d6986cc7102b-e03c56caf84a-JavaScript-WS-252.23892.411" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="94233cb7-780d-40bf-991d-cedb8570f232" name="Changes" comment="" />
+      <created>1765685254066</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1765685254066</updated>
+      <workItem from="1765685255442" duration="4219000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="feat: setting project&#10;&#10;- **React 19** - UI framework&#10;- **TypeScript** - Type safety&#10;- **Three.js** - 3D rendering engine&#10;- **Vite** - Build tool and dev server&#10;- **Zustand** - State management&#10;- **Tailwind CSS** - Styling" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat: setting project&#10;&#10;- **React 19** - UI framework&#10;- **TypeScript** - Type safety&#10;- **Three.js** - 3D rendering engine&#10;- **Vite** - Build tool and dev server&#10;- **Zustand** - State management&#10;- **Tailwind CSS** - Styling" />
+  </component>
 </project>

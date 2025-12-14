@@ -1,0 +1,29 @@
+export const GAME_CONFIG = {
+  PLAYER_SPAWN_POSITION: { x: 0, y: 0, z: 0 },
+  PLAYER_MOVE_SPEED: 0.15,
+  BULLET_SPEED: 0.5,
+  BULLET_LIFETIME: 3000,
+  MONSTER_BASE_HEALTH: 3,
+  MONSTER_BASE_SPEED: 0.02,
+  AUTO_SHOOT_INTERVAL: 300,
+  MAX_TARGET_ANGLE: Math.PI / 3,
+  SPAWN_DISTANCE_MIN: 15,
+  SPAWN_DISTANCE_MAX: 20,
+  SPAWN_INTERVAL: 2000,
+  POINTS_PER_KILL: 100,
+} as const
+
+export const CAMERA_CONFIG = {
+  FOV: 75,
+  NEAR: 0.1,
+  FAR: 1000,
+  POSITION: { x: 0, y: 15, z: 15 },
+  LOOK_AT: { x: 0, y: 0, z: 0 },
+} as const
+
+export const COLORS = {
+  PLAYER: 0x00ff00,
+  MONSTER: 0xff0000,
+  BULLET: 0xffff00,
+  GROUND: 0x808080,
+} as const

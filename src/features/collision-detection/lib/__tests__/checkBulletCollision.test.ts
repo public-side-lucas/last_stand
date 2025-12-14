@@ -1,0 +1,38 @@
+import { checkBulletCollision } from '../checkBulletCollision'
+import type { Bullet } from '@/entities/bullet'
+import type { Monster } from '@/entities/monster'
+
+describe('checkBulletCollision', () => {
+  const createBullet = (x: number, z: number): Bullet => ({
+    id: 'bullet-1',
+    position: { x, y: 0, z },
+    direction: { x: 1, y: 0, z: 0 },
+    speed: 0.5,
+    createdAt: Date.now(),
+  })
+
+  const createMonster = (id: string, x: number, z: number): Monster => ({
+    id,
+    position: { x, y: 0, z },
+    health: 3,
+    speed: 0.02,
+  })
+
+  it('should detect collision when bullet is close to monster', () => {
+    const bullet = createBullet(0, 0)
+    const monsters = [createMonster('1', 0.5, 0)]
+
+    const result = checkBulletCollision(bullet, monsters)
+
+    expect(result?.id).toBe('1')
+  })
+
+  it('should return null when bullet is far from all monsters', () => {
+    const bullet = createBullet(0, 0)
+    const monsters = [createMonster('1', 10, 10)]
+
+    const result = checkBulletCollision(bullet, monsters)
+
+    expect(result).toBeNull()
+  })
+})
