@@ -1,5 +1,6 @@
 import type { Monster } from '@/entities/monster'
-import { calculateAngleBetween, GAME_CONFIG, Vector3 } from '@/shared'
+import { calculateAngleBetween, GAME_CONFIG } from '@/shared'
+import {Vector3} from "three";
 
 interface FindTargetParams {
   playerPosition: Vector3

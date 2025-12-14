@@ -1,0 +1,1 @@
+import { defineConfig } from 'vite';import react from '@vitejs/plugin-react';import tsconfigPaths from "vite-tsconfig-paths";export default defineConfig({    plugins: [react(), tsconfigPaths()],    resolve: {},    server: {        port: 3000, // CRA와 동일한 포트 사용 (선택사항)    },    build: {        outDir: 'build', // CRA 기본 출력 폴더명 유지 (Vite 기본값은 dist)    },});
