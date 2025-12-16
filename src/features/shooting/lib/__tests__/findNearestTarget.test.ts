@@ -39,7 +39,7 @@ describe('findNearestTarget', () => {
 
   it('should return null for empty monster array', () => {
     const result = findNearestTarget({
-      playerPosition: { x: 0, y: 0, z: 0 },
+      playerPosition: { x: 0, y: 0, z: 0 } ,
       playerDirection: { x: 1, y: 0, z: 0 },
       monsters: [],
     })

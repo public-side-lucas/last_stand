@@ -7,12 +7,6 @@ import { GameOverScreen } from '@/widgets/game-over-screen'
 export const GamePage = () => {
   const { state, resetGame } = useGameStore()
 
-  useEffect(() => {
-    if (state === 'menu') {
-      resetGame()
-    }
-  }, [state, resetGame])
-
   return (
     <div className="relative w-screen h-screen overflow-hidden">
       {state === 'menu' && (

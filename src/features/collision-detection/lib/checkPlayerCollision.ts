@@ -1,18 +1,26 @@
 import type { Monster } from '@/entities/monster'
 import type { Vector3 } from '@/shared/types/common'
 import { vector3Distance } from '@/shared/lib/math/vector'
+import {Box3, BufferGeometry, Material, Mesh, Object3D, type Object3DEventMap} from "three";
+import * as THREE from "three";
 
 const COLLISION_DISTANCE = 1.5
 
 export const checkPlayerCollision = (
-  playerPosition: Vector3,
-  monsters: Monster[]
+  monsters: Monster[],
+  playerMesh?:  Mesh<BufferGeometry, Material | Material[], Object3DEventMap>,
 ): boolean => {
-  for (const monster of monsters) {
-    const distance = vector3Distance(playerPosition, monster.position)
-    if (distance < COLLISION_DISTANCE) {
-      return true
+    if(!playerMesh) return false
+
+    const playerBox =  new THREE.Box3().setFromObject(playerMesh)
+
+    for(const monster of monsters) {
+        if(!monster.mesh)continue
+
+        const monsterBox = new THREE.Box3().setFromObject(monster.mesh)
+
+        if(playerBox.intersectsBox(monsterBox))return true
     }
-  }
-  return false
+
+    return false
 }

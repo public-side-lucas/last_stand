@@ -154,6 +154,7 @@ export const useGameLoop = (
       const currentBullets = useBulletStore.getState().bullets
 
       // Handle player movement
+        console.log(currentPlayer, playerMeshRef.current)
       if (currentPlayer && playerMeshRef.current) {
         let moveX = 0
         let moveZ = 0
@@ -177,6 +178,8 @@ export const useGameLoop = (
             y: currentPlayer.position.y,
             z: currentPlayer.position.z + moveZ * speed,
           }
+
+          console.log(newPosition)
 
           updatePosition(newPosition)
           playerMeshRef.current.position.set(newPosition.x, newPosition.y, newPosition.z)
@@ -215,14 +218,13 @@ export const useGameLoop = (
           z: Math.cos(currentPlayer.rotation),
         }
 
-        const target = findNearestTarget({
-          playerPosition: currentPlayer.position,
-          playerDirection: direction,
-          monsters: currentMonsters,
-        })
+          const targetPosition = {
+              x: currentPlayer.position.x + direction.x * 100,
+              y: currentPlayer.position.y,
+              z: currentPlayer.position.z + direction.z * 100,
+          }
 
-        if (target) {
-          const bullet = createBullet(currentPlayer.position, target.position)
+          const bullet = createBullet(currentPlayer.position, targetPosition)
 
           const geometry = new THREE.SphereGeometry(0.2)
           const material = new THREE.MeshStandardMaterial({ color: COLORS.BULLET })
@@ -232,7 +234,6 @@ export const useGameLoop = (
 
           addBullet({ ...bullet, mesh })
           lastShootTimeRef.current = now
-        }
       }
 
       currentBullets.forEach((bullet) => {
@@ -268,7 +269,7 @@ export const useGameLoop = (
         }
       })
 
-      if (currentPlayer && checkPlayerCollision(currentPlayer.position, currentMonsters)) {
+      if (currentPlayer && checkPlayerCollision(currentMonsters,currentPlayer.mesh)) {
         setState('gameOver')
       }
 
