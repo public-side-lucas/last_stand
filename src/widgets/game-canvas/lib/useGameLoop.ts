@@ -140,7 +140,7 @@ export const useGameLoop = (
   }, [])
 
   useEffect(() => {
-    if (!sceneRef.current || !cameraRef.current || !rendererRef.current || state !== 'playing') return
+    if (!sceneRef.current || !cameraRef.current || !rendererRef.current || !keysRef.current || state !== 'playing') return
 
     let animationFrameId: number
 
@@ -154,7 +154,6 @@ export const useGameLoop = (
       const currentBullets = useBulletStore.getState().bullets
 
       // Handle player movement
-        console.log(currentPlayer, playerMeshRef.current)
       if (currentPlayer && playerMeshRef.current) {
         let moveX = 0
         let moveZ = 0
@@ -179,8 +178,6 @@ export const useGameLoop = (
             z: currentPlayer.position.z + moveZ * speed,
           }
 
-          console.log(newPosition)
-
           updatePosition(newPosition)
           playerMeshRef.current.position.set(newPosition.x, newPosition.y, newPosition.z)
         }
@@ -188,6 +185,7 @@ export const useGameLoop = (
 
       if (now - lastSpawnTimeRef.current > GAME_CONFIG.SPAWN_INTERVAL) {
         const position = getSpawnPosition()
+
         const monster = createMonster(position)
 
         const geometry = new THREE.BoxGeometry(1, 1, 1)
