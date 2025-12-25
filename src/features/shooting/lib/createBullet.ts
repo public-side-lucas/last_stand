@@ -20,6 +20,7 @@ export const createBullet = (
     position: { ...position },
     direction: normalized,
     speed: GAME_CONFIG.BULLET_SPEED,
+    damage: GAME_CONFIG.BULLET_DAMAGE,
     createdAt: Date.now(),
   }
 }

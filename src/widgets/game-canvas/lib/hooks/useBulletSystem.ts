@@ -7,6 +7,7 @@ import { updateBulletPosition } from '@/entities/bullet'
 import { checkBulletCollision } from '@/features/collision-detection'
 import { calculateKillScore } from '@/features/scoring'
 import { GAME_CONFIG } from '@/shared/config/constants'
+import { updateHealthBarScale } from '@/shared/lib/three'
 
 interface UseBulletSystemParams {
   sceneRef: React.MutableRefObject<THREE.Scene | undefined>
@@ -33,17 +34,27 @@ export const useBulletSystem = ({ sceneRef }: UseBulletSystemParams) => {
       // Check collision with monsters
       const hitMonster = checkBulletCollision(bullet, currentMonsters)
       if (hitMonster) {
-        damageMonster(hitMonster.id, 1)
+        damageMonster(hitMonster.id, bullet.damage)
         removeBullet(bullet.id)
 
         if (bullet.mesh && sceneRef.current) {
           sceneRef.current.remove(bullet.mesh)
         }
 
-        if (hitMonster.health <= 1) {
+        // Update health bar
+        const newHealth = hitMonster.health - bullet.damage
+        updateHealthBarScale(hitMonster.healthBarFill, newHealth, hitMonster.maxHealth)
+
+        if (newHealth <= 0) {
           addScore(calculateKillScore())
           if (hitMonster.mesh && sceneRef.current) {
             sceneRef.current.remove(hitMonster.mesh)
+          }
+          if (hitMonster.healthBarBackground && sceneRef.current) {
+            sceneRef.current.remove(hitMonster.healthBarBackground)
+          }
+          if (hitMonster.healthBarFill && sceneRef.current) {
+            sceneRef.current.remove(hitMonster.healthBarFill)
           }
         }
         return

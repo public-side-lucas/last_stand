@@ -6,6 +6,7 @@ export const createMonster = (position: { x: number; y: number; z: number }): Mo
     id: `monster-${Date.now()}-${Math.random()}`,
     position,
     health: GAME_CONFIG.MONSTER_BASE_HEALTH,
+    maxHealth: GAME_CONFIG.MONSTER_BASE_HEALTH,
     speed: GAME_CONFIG.MONSTER_BASE_SPEED,
   }
 }

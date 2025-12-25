@@ -7,6 +7,7 @@ describe('moveTowardsPlayer', () => {
       id: 'monster-1',
       position: { x: 10, y: 0, z: 10 },
       health: 3,
+      maxHealth: 3,
       speed: 0.02,
     }
 
@@ -24,6 +25,7 @@ describe('moveTowardsPlayer', () => {
       id: 'monster-1',
       position: { x: 0, y: 0, z: 0 },
       health: 3,
+      maxHealth: 3,
       speed: 0.02,
     }
 

@@ -2,6 +2,7 @@ export const GAME_CONFIG = {
   PLAYER_SPAWN_POSITION: { x: 0, y: 0, z: 0 },
   PLAYER_MOVE_SPEED: 0.15,
   BULLET_SPEED: 0.5,
+  BULLET_DAMAGE: 1,
   BULLET_LIFETIME: 3000,
   MONSTER_BASE_HEALTH: 3,
   MONSTER_BASE_SPEED: 0.02,
@@ -11,6 +12,7 @@ export const GAME_CONFIG = {
   SPAWN_DISTANCE_MAX: 20,
   SPAWN_INTERVAL: 200,
   POINTS_PER_KILL: 100,
+  MOVE_KEYS: ['KeyW', 'KeyA', 'KeyS', 'KeyD'],
 } as const
 
 export const CAMERA_CONFIG = {

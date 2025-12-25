@@ -8,6 +8,7 @@ describe('checkBulletCollision', () => {
     position: { x, y: 0, z },
     direction: { x: 1, y: 0, z: 0 },
     speed: 0.5,
+    damage: 1,
     createdAt: Date.now(),
   })
 
@@ -15,6 +16,7 @@ describe('checkBulletCollision', () => {
     id,
     position: { x, y: 0, z },
     health: 3,
+    maxHealth: 3,
     speed: 0.02,
   })
 

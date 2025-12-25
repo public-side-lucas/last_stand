@@ -47,16 +47,14 @@ export const usePlayerControls = ({
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      const key = event.key.toLowerCase()
-      if (['w', 'a', 's', 'd'].includes(key)) {
-        keysRef.current[key] = true
+      if ((GAME_CONFIG.MOVE_KEYS as readonly string[]).includes(event.code)) {
+        keysRef.current[event.code] = true
       }
     }
 
     const handleKeyUp = (event: KeyboardEvent) => {
-      const key = event.key.toLowerCase()
-      if (['w', 'a', 's', 'd'].includes(key)) {
-        keysRef.current[key] = false
+      if ((GAME_CONFIG.MOVE_KEYS as readonly string[]).includes(event.code)) {
+        keysRef.current[event.code] = false
       }
     }
 
@@ -78,10 +76,11 @@ export const usePlayerControls = ({
     let moveX = 0
     let moveZ = 0
 
-    if (keysRef.current['w']) moveZ -= 1
-    if (keysRef.current['s']) moveZ += 1
-    if (keysRef.current['a']) moveX -= 1
-    if (keysRef.current['d']) moveX += 1
+    if (keysRef.current[GAME_CONFIG.MOVE_KEYS[0]]) moveZ -= 1
+    if (keysRef.current[GAME_CONFIG.MOVE_KEYS[1]]) moveX -= 1
+    if (keysRef.current[GAME_CONFIG.MOVE_KEYS[2]]) moveZ += 1
+    if (keysRef.current[GAME_CONFIG.MOVE_KEYS[3]]) moveX += 1
+
 
     // Normalize diagonal movement
     if (moveX !== 0 && moveZ !== 0) {

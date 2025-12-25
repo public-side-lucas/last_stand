@@ -6,6 +6,7 @@ export interface Bullet {
   position: Vector3
   direction: Vector3
   speed: number
+  damage: number
   createdAt: number
   mesh?: THREE.Mesh
 }

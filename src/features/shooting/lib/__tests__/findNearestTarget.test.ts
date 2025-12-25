@@ -6,6 +6,7 @@ describe('findNearestTarget', () => {
     id,
     position: { x, y: 0, z },
     health: 3,
+    maxHealth: 3,
     speed: 0.02,
   })
 
