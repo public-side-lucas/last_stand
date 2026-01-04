@@ -8,6 +8,7 @@ describe('moveTowardsPlayer', () => {
       position: { x: 10, y: 0, z: 10 },
       health: 3,
       maxHealth: 3,
+      damage: 1,
       speed: 0.02,
     }
 
@@ -26,6 +27,7 @@ describe('moveTowardsPlayer', () => {
       position: { x: 0, y: 0, z: 0 },
       health: 3,
       maxHealth: 3,
+      damage: 1,
       speed: 0.02,
     }
 

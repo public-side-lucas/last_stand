@@ -6,5 +6,7 @@ export const createPlayer = (): Player => {
     id: 'player',
     position: { ...GAME_CONFIG.PLAYER_SPAWN_POSITION },
     rotation: 0,
+    health: GAME_CONFIG.PLAYER_MAX_HEALTH,
+    maxHealth: GAME_CONFIG.PLAYER_MAX_HEALTH,
   }
 }

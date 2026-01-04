@@ -6,6 +6,7 @@ export interface Monster {
   position: Vector3
   health: number
   maxHealth: number
+  damage: number
   speed: number
   mesh?: THREE.Mesh
   healthBarBackground?: THREE.Mesh

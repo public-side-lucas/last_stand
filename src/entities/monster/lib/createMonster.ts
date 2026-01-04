@@ -7,6 +7,7 @@ export const createMonster = (position: { x: number; y: number; z: number }): Mo
     position,
     health: GAME_CONFIG.MONSTER_BASE_HEALTH,
     maxHealth: GAME_CONFIG.MONSTER_BASE_HEALTH,
+    damage: GAME_CONFIG.MONSTER_BASE_DAMAGE,
     speed: GAME_CONFIG.MONSTER_BASE_SPEED,
   }
 }

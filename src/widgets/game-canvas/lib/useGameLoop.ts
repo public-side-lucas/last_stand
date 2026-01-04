@@ -1,8 +1,9 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { usePlayerStore } from '@/entities/player'
 import { useMonsterStore } from '@/entities/monster'
 import { useGameStore } from '@/entities/game'
 import { checkPlayerCollision } from '@/features/collision-detection'
+import { updateHealthBarScale, HEALTH_BAR_WIDTH } from '@/shared/lib/three'
 import { useThreeScene } from './hooks/useThreeScene'
 import { usePlayerControls } from './hooks/usePlayerControls'
 import { useMonsterSpawner } from './hooks/useMonsterSpawner'
@@ -15,6 +16,10 @@ export const useGameLoop = (
   containerRef: React.RefObject<HTMLDivElement | null>
 ) => {
   const { state, setState } = useGameStore()
+  const { damagePlayer } = usePlayerStore()
+
+  // Invincibility timer - 0.4 second bounce after taking damage
+  const lastDamageTimeRef = useRef(0)
 
   // Initialize Three.js scene
   const { sceneRef, cameraRef, rendererRef, playerMeshRef } = useThreeScene(containerRef)
@@ -54,6 +59,15 @@ export const useGameLoop = (
       // Update player movement
       updatePlayerMovement(deltaTime)
 
+      // Update player health bar position
+      const player = usePlayerStore.getState().player
+      if (player?.healthBarBackground && player?.healthBarFill) {
+        const healthBarY = player.position.y + 1.5
+        const healthBarX = player.position.x - HEALTH_BAR_WIDTH / 2
+        player.healthBarBackground.position.set(healthBarX, healthBarY, player.position.z)
+        player.healthBarFill.position.set(healthBarX, healthBarY, player.position.z + 0.02)
+      }
+
       // Spawn monsters
       spawnMonster(now)
 
@@ -69,8 +83,22 @@ export const useGameLoop = (
       // Check player collision
       const currentPlayer = usePlayerStore.getState().player
       const currentMonsters = useMonsterStore.getState().monsters
-      if (currentPlayer && checkPlayerCollision(currentMonsters, currentPlayer.mesh)) {
-        setState('gameOver')
+      const hitMonster = checkPlayerCollision(currentMonsters, currentPlayer?.mesh)
+
+      // Only apply damage if invincibility period (400ms) has passed
+      const INVINCIBILITY_TIME = 400
+      if (currentPlayer && hitMonster && now - lastDamageTimeRef.current >= INVINCIBILITY_TIME) {
+        damagePlayer(hitMonster.damage)
+        updateHealthBarScale(
+          currentPlayer.healthBarFill,
+          currentPlayer.health - hitMonster.damage,
+          currentPlayer.maxHealth
+        )
+        lastDamageTimeRef.current = now
+
+        if (currentPlayer.health - hitMonster.damage <= 0) {
+          setState('gameOver')
+        }
       }
 
       // Update camera

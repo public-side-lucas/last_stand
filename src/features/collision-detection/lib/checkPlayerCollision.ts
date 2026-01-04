@@ -9,8 +9,8 @@ const COLLISION_DISTANCE = 1.5
 export const checkPlayerCollision = (
   monsters: Monster[],
   playerMesh?:  Mesh<BufferGeometry, Material | Material[], Object3DEventMap>,
-): boolean => {
-    if(!playerMesh) return false
+): Monster | null => {
+    if(!playerMesh) return null
 
     const playerBox =  new THREE.Box3().setFromObject(playerMesh)
 
@@ -19,8 +19,8 @@ export const checkPlayerCollision = (
 
         const monsterBox = new THREE.Box3().setFromObject(monster.mesh)
 
-        if(playerBox.intersectsBox(monsterBox))return true
+        if(playerBox.intersectsBox(monsterBox))return monster
     }
 
-    return false
+    return null
 }

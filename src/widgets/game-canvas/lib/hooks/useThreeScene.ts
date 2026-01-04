@@ -1,7 +1,8 @@
 import { useEffect, useRef } from 'react'
 import * as THREE from 'three'
 import { usePlayerStore } from '@/entities/player'
-import { COLORS } from '@/shared/config/constants'
+import { COLORS, GAME_CONFIG } from '@/shared/config/constants'
+import { createHealthBar, HEALTH_BAR_WIDTH } from '@/shared/lib/three'
 
 interface UseThreeSceneReturn {
   sceneRef: React.MutableRefObject<THREE.Scene | undefined>
@@ -70,11 +71,24 @@ export const useThreeScene = (
     scene.add(playerMesh)
     playerMeshRef.current = playerMesh
 
+    // Player health bar
+    const { background: playerHealthBg, fill: playerHealthFill } = createHealthBar()
+    const healthBarY = 1.5 // Above the player
+    const healthBarX = 0 - HEALTH_BAR_WIDTH / 2
+    playerHealthBg.position.set(healthBarX, healthBarY, 0)
+    playerHealthFill.position.set(healthBarX, healthBarY, 0.02)
+    scene.add(playerHealthBg)
+    scene.add(playerHealthFill)
+
     setPlayer({
       id: 'player',
       position: { x: 0, y: 0, z: 0 },
       rotation: 0,
+      health: GAME_CONFIG.PLAYER_MAX_HEALTH,
+      maxHealth: GAME_CONFIG.PLAYER_MAX_HEALTH,
       mesh: playerMesh,
+      healthBarBackground: playerHealthBg,
+      healthBarFill: playerHealthFill,
     })
 
     const container = containerRef.current
