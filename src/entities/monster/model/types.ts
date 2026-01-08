@@ -1,5 +1,4 @@
 import type { Vector3 } from '@/shared'
-import type * as THREE from 'three'
 
 export interface Monster {
   id: string
@@ -8,7 +7,4 @@ export interface Monster {
   maxHealth: number
   damage: number
   speed: number
-  mesh?: THREE.Mesh
-  healthBarBackground?: THREE.Mesh
-  healthBarFill?: THREE.Mesh
 }

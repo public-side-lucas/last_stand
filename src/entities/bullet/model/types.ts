@@ -1,5 +1,4 @@
 import type { Vector3 } from '@/shared/types/common'
-import type * as THREE from 'three'
 
 export interface Bullet {
   id: string
@@ -8,5 +7,4 @@ export interface Bullet {
   speed: number
   damage: number
   createdAt: number
-  mesh?: THREE.Mesh
 }
