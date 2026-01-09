@@ -1,5 +1,6 @@
 import { useRef, useState, useEffect } from 'react'
 import { Canvas } from '@react-three/fiber'
+import { Physics } from '@react-three/rapier'
 import { usePlayerStore } from '@/entities/player'
 import { useGameStore } from '@/entities/game'
 import { GAME_CONFIG, CAMERA_CONFIG } from '@/shared/config/constants'
@@ -25,6 +26,7 @@ export const GameCanvas = () => {
       rotation: 0,
       health: GAME_CONFIG.PLAYER_MAX_HEALTH,
       maxHealth: GAME_CONFIG.PLAYER_MAX_HEALTH,
+      velocity: { x: 0, y: 0, z: 0 },
     })
   }, [setPlayer])
 
@@ -43,9 +45,11 @@ export const GameCanvas = () => {
         <Lights />
         <Ground />
 
-        <PlayerMesh />
-        <MonsterList />
-        <BulletList />
+        <Physics gravity={[0, 0, 0]}>
+          <PlayerMesh />
+          <MonsterList />
+          <BulletList />
+        </Physics>
 
         {state === 'playing' && (
           <>

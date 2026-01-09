@@ -6,4 +6,5 @@ export interface Player {
   rotation: number
   health: number
   maxHealth: number
+  velocity: Vector3
 }

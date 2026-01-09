@@ -40,6 +40,18 @@ export const GameLogic = ({ keysRef, playerRotation }: GameLogicProps) => {
     const monsters = monsterStore.monsters
     const bullets = bulletStore.bullets
 
+    // === VELOCITY APPLICATION AND DAMPING ===
+    const VELOCITY_DAMPING = 0.85 // Friction/air resistance
+    let currentVelocity = { ...player.velocity }
+
+    // Apply damping to velocity
+    currentVelocity.x *= VELOCITY_DAMPING
+    currentVelocity.z *= VELOCITY_DAMPING
+
+    // Stop very small velocities to avoid floating point drift
+    if (Math.abs(currentVelocity.x) < 0.01) currentVelocity.x = 0
+    if (Math.abs(currentVelocity.z) < 0.01) currentVelocity.z = 0
+
     // === PLAYER MOVEMENT ===
     let moveX = 0
     let moveZ = 0
@@ -56,15 +68,33 @@ export const GameLogic = ({ keysRef, playerRotation }: GameLogicProps) => {
       moveZ /= length
     }
 
+    // Add player input to velocity
     if (moveX !== 0 || moveZ !== 0) {
       const speed = GAME_CONFIG.PLAYER_MOVE_SPEED * (deltaTime / 16)
-      const newPosition = {
-        x: player.position.x + moveX * speed,
-        y: player.position.y,
-        z: player.position.z + moveZ * speed,
-      }
-      playerStore.updatePosition(newPosition)
+      currentVelocity.x += moveX * speed
+      currentVelocity.z += moveZ * speed
     }
+
+    // Clamp velocity to max speed
+    const velocityMagnitude = Math.sqrt(
+      currentVelocity.x * currentVelocity.x +
+      currentVelocity.z * currentVelocity.z
+    )
+
+    if (velocityMagnitude > GAME_CONFIG.PLAYER_MAX_VELOCITY) {
+      const scale = GAME_CONFIG.PLAYER_MAX_VELOCITY / velocityMagnitude
+      currentVelocity.x *= scale
+      currentVelocity.z *= scale
+    }
+
+    // Apply velocity to position
+    const newPosition = {
+      x: player.position.x + currentVelocity.x,
+      y: player.position.y,
+      z: player.position.z + currentVelocity.z,
+    }
+    playerStore.updatePosition(newPosition)
+    playerStore.updateVelocity(currentVelocity)
 
     // === MONSTER SPAWNING ===
     if (now - lastSpawnTimeRef.current > GAME_CONFIG.SPAWN_INTERVAL) {
@@ -128,10 +158,28 @@ export const GameLogic = ({ keysRef, playerRotation }: GameLogicProps) => {
     // === PLAYER COLLISION ===
     const hitMonster = checkPlayerCollision(monsters, player)
     const INVINCIBILITY_TIME = 400
+    const KNOCKBACK_FORCE = 1.5 // Force applied to velocity
 
     if (hitMonster && now - lastDamageTimeRef.current >= INVINCIBILITY_TIME) {
       playerStore.damagePlayer(hitMonster.damage)
       lastDamageTimeRef.current = now
+
+      // Apply knockback force to velocity - push player away from monster
+      const dx = player.position.x - hitMonster.position.x
+      const dz = player.position.z - hitMonster.position.z
+      const distance = Math.sqrt(dx * dx + dz * dz)
+
+      if (distance > 0) {
+        const knockbackVelocityX = (dx / distance) * KNOCKBACK_FORCE
+        const knockbackVelocityZ = (dz / distance) * KNOCKBACK_FORCE
+
+        // Add knockback to current velocity
+        playerStore.updateVelocity({
+          x: currentVelocity.x + knockbackVelocityX,
+          y: 0,
+          z: currentVelocity.z + knockbackVelocityZ,
+        })
+      }
 
       if (player.health - hitMonster.damage <= 0) {
         gameStore.setState('gameOver')

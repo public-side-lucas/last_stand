@@ -6,6 +6,7 @@ interface PlayerStore {
   setPlayer: (player: Player) => void
   updateRotation: (rotation: number) => void
   updatePosition: (position: { x: number; y: number; z: number }) => void
+  updateVelocity: (velocity: { x: number; y: number; z: number }) => void
   damagePlayer: (damage: number) => void
 }
 
@@ -19,6 +20,10 @@ export const usePlayerStore = create<PlayerStore>((set) => ({
   updatePosition: (position) =>
     set((state) => ({
       player: state.player ? { ...state.player, position } : null,
+    })),
+  updateVelocity: (velocity) =>
+    set((state) => ({
+      player: state.player ? { ...state.player, velocity } : null,
     })),
   damagePlayer: (damage) =>
     set((state) => ({
