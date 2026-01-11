@@ -21,6 +21,7 @@ export const createBullet = (
     direction: normalized,
     speed: GAME_CONFIG.BULLET_SPEED,
     damage: GAME_CONFIG.BULLET_DAMAGE,
+    knockbackForce: GAME_CONFIG.BULLET_KNOCKBACK_FORCE,
     createdAt: Date.now(),
   }
 }

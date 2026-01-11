@@ -7,14 +7,18 @@
     <list default="true" id="94233cb7-780d-40bf-991d-cedb8570f232" name="Changes" comment="  feat: 유저 통과 못하도록 수정 및 충돌 시 딜리에 추가">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/entities/player/model/player.store.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/entities/player/model/player.store.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/entities/player/model/types.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/entities/player/model/types.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/entities/bullet/model/types.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/entities/bullet/model/types.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/entities/monster/lib/__tests__/moveTowardsPlayer.test.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/entities/monster/lib/__tests__/moveTowardsPlayer.test.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/entities/monster/lib/createMonster.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/entities/monster/lib/createMonster.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/entities/monster/model/monster.store.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/entities/monster/model/monster.store.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/entities/monster/model/types.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/entities/monster/model/types.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/entities/player/lib/createPlayer.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/entities/player/lib/createPlayer.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/features/collision-detection/lib/__tests__/checkBulletCollision.test.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/features/collision-detection/lib/__tests__/checkBulletCollision.test.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/features/collision-detection/lib/checkBulletCollision.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/features/collision-detection/lib/checkBulletCollision.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/features/shooting/lib/__tests__/findNearestTarget.test.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/features/shooting/lib/__tests__/findNearestTarget.test.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/features/shooting/lib/createBullet.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/features/shooting/lib/createBullet.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/shared/config/constants.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/shared/config/constants.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/widgets/game-canvas/ui/GameCanvas.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/widgets/game-canvas/ui/GameCanvas.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/widgets/game-canvas/ui/components/GameLogic.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/widgets/game-canvas/ui/components/GameLogic.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/widgets/game-canvas/ui/components/MonsterMesh.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/widgets/game-canvas/ui/components/MonsterMesh.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/widgets/game-canvas/ui/components/PlayerMesh.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/widgets/game-canvas/ui/components/PlayerMesh.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -63,7 +67,7 @@
     "nodejs_package_manager_path": "npm",
     "npm.npm start.executor": "Debug",
     "settings.editor.selected.configurable": "preferences.pluginManager",
-    "ts.external.directory.path": "/Users/bmkim/Documents/kim/last_stand/node_modules/typescript/lib",
+    "ts.external.directory.path": "/Users/storelink/Documents/byungmin/last_stand/node_modules/typescript/lib",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>

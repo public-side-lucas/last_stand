@@ -6,6 +6,7 @@ describe('moveTowardsPlayer', () => {
     const monster: Monster = {
       id: 'monster-1',
       position: { x: 10, y: 0, z: 10 },
+      velocity: { x: 0, y: 0, z: 0 },
       health: 3,
       maxHealth: 3,
       damage: 1,
@@ -25,6 +26,7 @@ describe('moveTowardsPlayer', () => {
     const monster: Monster = {
       id: 'monster-1',
       position: { x: 0, y: 0, z: 0 },
+      velocity: { x: 0, y: 0, z: 0 },
       health: 3,
       maxHealth: 3,
       damage: 1,

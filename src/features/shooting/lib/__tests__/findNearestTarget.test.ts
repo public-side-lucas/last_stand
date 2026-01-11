@@ -5,6 +5,7 @@ describe('findNearestTarget', () => {
   const createMonster = (id: string, x: number, z: number): Monster => ({
     id,
     position: { x, y: 0, z },
+    velocity: { x: 0, y: 0, z: 0 },
     health: 3,
     maxHealth: 3,
     damage: 1,

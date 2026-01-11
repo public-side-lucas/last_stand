@@ -41,12 +41,11 @@ export const GameLogic = ({ keysRef, playerRotation }: GameLogicProps) => {
     const bullets = bulletStore.bullets
 
     // === VELOCITY APPLICATION AND DAMPING ===
-    const VELOCITY_DAMPING = 0.85 // Friction/air resistance
     let currentVelocity = { ...player.velocity }
 
     // Apply damping to velocity
-    currentVelocity.x *= VELOCITY_DAMPING
-    currentVelocity.z *= VELOCITY_DAMPING
+    currentVelocity.x *= GAME_CONFIG.PLAYER_VELOCITY_DAMPING
+    currentVelocity.z *= GAME_CONFIG.PLAYER_VELOCITY_DAMPING
 
     // Stop very small velocities to avoid floating point drift
     if (Math.abs(currentVelocity.x) < 0.01) currentVelocity.x = 0
@@ -106,8 +105,27 @@ export const GameLogic = ({ keysRef, playerRotation }: GameLogicProps) => {
 
     // === MONSTER MOVEMENT ===
     monsters.forEach((monster) => {
-      const newPosition = moveTowardsPlayer(monster, player.position, deltaTime)
+      // Apply velocity damping (for knockback)
+      let currentVelocity = { ...monster.velocity }
+      currentVelocity.x *= GAME_CONFIG.MONSTER_VELOCITY_DAMPING
+      currentVelocity.z *= GAME_CONFIG.MONSTER_VELOCITY_DAMPING
+
+      // Stop very small velocities
+      if (Math.abs(currentVelocity.x) < 0.01) currentVelocity.x = 0
+      if (Math.abs(currentVelocity.z) < 0.01) currentVelocity.z = 0
+
+      // Calculate normal movement towards player
+      const targetPosition = moveTowardsPlayer(monster, player.position, deltaTime)
+
+      // Apply knockback velocity on top of normal movement
+      const newPosition = {
+        x: targetPosition.x + currentVelocity.x,
+        y: monster.position.y,
+        z: targetPosition.z + currentVelocity.z,
+      }
+
       monsterStore.updateMonsterPosition(monster.id, newPosition)
+      monsterStore.updateMonsterVelocity(monster.id, currentVelocity)
     })
 
     // === AUTO SHOOTING ===
@@ -135,12 +153,25 @@ export const GameLogic = ({ keysRef, playerRotation }: GameLogicProps) => {
       const newPosition = updateBulletPosition(bullet, deltaTime)
       bulletStore.updateBulletPosition(bullet.id, newPosition)
 
-      // Check collision
-      const hitMonster = checkBulletCollision(bullet, monsters)
+      // Check collision with UPDATED position
+      const updatedBullet = { ...bullet, position: newPosition }
+      const hitMonster = checkBulletCollision(updatedBullet, monsters)
       if (hitMonster) {
         const newHealth = hitMonster.health - bullet.damage
         bulletStore.removeBullet(bullet.id)
         monsterStore.damageMonster(hitMonster.id, bullet.damage)
+
+        // Apply knockback to monster in bullet's direction
+        // Use bullet's direction vector (already normalized)
+        const knockbackVelocityX = bullet.direction.x * bullet.knockbackForce
+        const knockbackVelocityZ = bullet.direction.z * bullet.knockbackForce
+
+        // Add knockback to monster velocity
+        monsterStore.updateMonsterVelocity(hitMonster.id, {
+          x: hitMonster.velocity.x + knockbackVelocityX,
+          y: 0,
+          z: hitMonster.velocity.z + knockbackVelocityZ,
+        })
 
         if (newHealth <= 0) {
           gameStore.addScore(calculateKillScore())
@@ -157,32 +188,33 @@ export const GameLogic = ({ keysRef, playerRotation }: GameLogicProps) => {
 
     // === PLAYER COLLISION ===
     const hitMonster = checkPlayerCollision(monsters, player)
-    const INVINCIBILITY_TIME = 400
-    const KNOCKBACK_FORCE = 1.5 // Force applied to velocity
 
-    if (hitMonster && now - lastDamageTimeRef.current >= INVINCIBILITY_TIME) {
-      playerStore.damagePlayer(hitMonster.damage)
-      lastDamageTimeRef.current = now
-
-      // Apply knockback force to velocity - push player away from monster
+    if (hitMonster) {
+      // ALWAYS apply knockback when colliding (regardless of invincibility)
       const dx = player.position.x - hitMonster.position.x
       const dz = player.position.z - hitMonster.position.z
       const distance = Math.sqrt(dx * dx + dz * dz)
 
       if (distance > 0) {
-        const knockbackVelocityX = (dx / distance) * KNOCKBACK_FORCE
-        const knockbackVelocityZ = (dz / distance) * KNOCKBACK_FORCE
+        const knockbackVelocityX = (dx / distance) * GAME_CONFIG.PLAYER_KNOCKBACK_FORCE
+        const knockbackVelocityZ = (dz / distance) * GAME_CONFIG.PLAYER_KNOCKBACK_FORCE
 
-        // Add knockback to current velocity
+        // Set knockback velocity directly (override current velocity for immediate effect)
         playerStore.updateVelocity({
-          x: currentVelocity.x + knockbackVelocityX,
+          x: knockbackVelocityX,
           y: 0,
-          z: currentVelocity.z + knockbackVelocityZ,
+          z: knockbackVelocityZ,
         })
       }
 
-      if (player.health - hitMonster.damage <= 0) {
-        gameStore.setState('gameOver')
+      // Apply damage only if not in invincibility period
+      if (now - lastDamageTimeRef.current >= GAME_CONFIG.PLAYER_INVINCIBILITY_TIME) {
+        playerStore.damagePlayer(hitMonster.damage)
+        lastDamageTimeRef.current = now
+
+        if (player.health - hitMonster.damage <= 0) {
+          gameStore.setState('gameOver')
+        }
       }
     }
   })

@@ -8,5 +8,6 @@ export const createPlayer = (): Player => {
     rotation: 0,
     health: GAME_CONFIG.PLAYER_MAX_HEALTH,
     maxHealth: GAME_CONFIG.PLAYER_MAX_HEALTH,
+    velocity: { x: 0, y: 0, z: 0 },
   }
 }

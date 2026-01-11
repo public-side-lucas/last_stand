@@ -2,7 +2,8 @@ import type { Bullet } from '@/entities/bullet'
 import type { Monster } from '@/entities/monster'
 import { vector3Distance } from '@/shared'
 
-const COLLISION_DISTANCE = 1.0
+// Smaller collision distance for bullets (more precise)
+const BULLET_COLLISION_DISTANCE = 0.6
 
 export const checkBulletCollision = (
   bullet: Bullet,
@@ -10,7 +11,7 @@ export const checkBulletCollision = (
 ): Monster | null => {
   for (const monster of monsters) {
     const distance = vector3Distance(bullet.position, monster.position)
-    if (distance < COLLISION_DISTANCE) {
+    if (distance < BULLET_COLLISION_DISTANCE) {
       return monster
     }
   }

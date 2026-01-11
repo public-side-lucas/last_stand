@@ -6,6 +6,7 @@ interface MonsterStore {
   addMonster: (monster: Monster) => void
   removeMonster: (id: string) => void
   updateMonsterPosition: (id: string, position: { x: number; y: number; z: number }) => void
+  updateMonsterVelocity: (id: string, velocity: { x: number; y: number; z: number }) => void
   damageMonster: (id: string, damage: number) => void
   clearMonsters: () => void
 }
@@ -20,6 +21,12 @@ export const useMonsterStore = create<MonsterStore>((set) => ({
     set((state) => ({
       monsters: state.monsters.map((m) =>
         m.id === id ? { ...m, position } : m
+      ),
+    })),
+  updateMonsterVelocity: (id, velocity) =>
+    set((state) => ({
+      monsters: state.monsters.map((m) =>
+        m.id === id ? { ...m, velocity } : m
       ),
     })),
   damageMonster: (id, damage) =>

@@ -6,5 +6,6 @@ export interface Bullet {
   direction: Vector3
   speed: number
   damage: number
+  knockbackForce: number
   createdAt: number
 }

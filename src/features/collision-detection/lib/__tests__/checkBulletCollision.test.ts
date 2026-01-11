@@ -9,12 +9,14 @@ describe('checkBulletCollision', () => {
     direction: { x: 1, y: 0, z: 0 },
     speed: 0.5,
     damage: 1,
+    knockbackForce: 2.5,
     createdAt: Date.now(),
   })
 
   const createMonster = (id: string, x: number, z: number): Monster => ({
     id,
     position: { x, y: 0, z },
+    velocity: { x: 0, y: 0, z: 0 },
     health: 3,
     maxHealth: 3,
     damage: 1,
