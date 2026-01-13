@@ -6,10 +6,14 @@ describe('checkBulletCollision', () => {
   const createBullet = (x: number, z: number): Bullet => ({
     id: 'bullet-1',
     position: { x, y: 0, z },
+    spawnPosition: { x: 0, y: 0, z: 0 },
     direction: { x: 1, y: 0, z: 0 },
     speed: 0.5,
     damage: 1,
-    knockbackForce: 2.5,
+    knockbackForce: 0.2,
+    canPenetrate: false,
+    range: 20,
+    hitMonsters: [],
     createdAt: Date.now(),
   })
 

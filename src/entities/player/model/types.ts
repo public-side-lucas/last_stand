@@ -1,5 +1,7 @@
 import type { Vector3 } from '@/shared/types/common'
 
+export type PlayerClass = 'ASSAULT' | 'SNIPER'
+
 export interface Player {
   id: string
   position: Vector3
@@ -7,4 +9,5 @@ export interface Player {
   health: number
   maxHealth: number
   velocity: Vector3
+  playerClass: PlayerClass
 }

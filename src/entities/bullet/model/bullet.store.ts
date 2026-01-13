@@ -6,6 +6,7 @@ interface BulletStore {
   addBullet: (bullet: Bullet) => void
   removeBullet: (id: string) => void
   updateBulletPosition: (id: string, position: { x: number; y: number; z: number }) => void
+  updateBullet: (id: string, bullet: Bullet) => void
   clearBullets: () => void
 }
 
@@ -19,6 +20,12 @@ export const useBulletStore = create<BulletStore>((set) => ({
     set((state) => ({
       bullets: state.bullets.map((b) =>
         b.id === id ? { ...b, position } : b
+      ),
+    })),
+  updateBullet: (id, bullet) =>
+    set((state) => ({
+      bullets: state.bullets.map((b) =>
+        b.id === id ? bullet : b
       ),
     })),
   clearBullets: () => set({ bullets: [] }),

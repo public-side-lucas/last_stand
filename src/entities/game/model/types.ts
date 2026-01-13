@@ -1,1 +1,1 @@
-export type GameState = 'menu' | 'playing' | 'paused' | 'gameOver'
+export type GameState = 'menu' | 'characterSelect' | 'playing' | 'paused' | 'gameOver'

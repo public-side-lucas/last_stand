@@ -12,7 +12,7 @@ import { createBullet } from '@/features/shooting'
 import { createMonster } from '@/entities/monster'
 import { getSpawnPosition } from '@/features/monster-spawning'
 import { calculateKillScore } from '@/features/scoring'
-import { GAME_CONFIG } from '@/shared/config/constants'
+import { GAME_CONFIG, PLAYER_CLASS_CONFIG } from '@/shared/config/constants'
 
 interface GameLogicProps {
   keysRef: React.MutableRefObject<{ [key: string]: boolean }>
@@ -40,16 +40,8 @@ export const GameLogic = ({ keysRef, playerRotation }: GameLogicProps) => {
     const monsters = monsterStore.monsters
     const bullets = bulletStore.bullets
 
-    // === VELOCITY APPLICATION AND DAMPING ===
-    let currentVelocity = { ...player.velocity }
-
-    // Apply damping to velocity
-    currentVelocity.x *= GAME_CONFIG.PLAYER_VELOCITY_DAMPING
-    currentVelocity.z *= GAME_CONFIG.PLAYER_VELOCITY_DAMPING
-
-    // Stop very small velocities to avoid floating point drift
-    if (Math.abs(currentVelocity.x) < 0.01) currentVelocity.x = 0
-    if (Math.abs(currentVelocity.z) < 0.01) currentVelocity.z = 0
+    // Get class-specific configuration
+    const classConfig = PLAYER_CLASS_CONFIG[player.playerClass]
 
     // === PLAYER MOVEMENT ===
     let moveX = 0
@@ -67,12 +59,26 @@ export const GameLogic = ({ keysRef, playerRotation }: GameLogicProps) => {
       moveZ /= length
     }
 
+    // Check if player is moving (for sniper shooting restriction)
+    const isMoving = moveX !== 0 || moveZ !== 0
+
+    // === VELOCITY APPLICATION AND DAMPING ===
+    let currentVelocity = { ...player.velocity }
+
+    // Apply damping to velocity
+    currentVelocity.x *= GAME_CONFIG.PLAYER_VELOCITY_DAMPING
+    currentVelocity.z *= GAME_CONFIG.PLAYER_VELOCITY_DAMPING
+
     // Add player input to velocity
     if (moveX !== 0 || moveZ !== 0) {
-      const speed = GAME_CONFIG.PLAYER_MOVE_SPEED * (deltaTime / 16)
+      const speed = classConfig.MOVE_SPEED * (deltaTime / 16)
       currentVelocity.x += moveX * speed
       currentVelocity.z += moveZ * speed
     }
+
+    // Stop very small velocities to avoid floating point drift (only when no input)
+    if (moveX === 0 && Math.abs(currentVelocity.x) < 0.02) currentVelocity.x = 0
+    if (moveZ === 0 && Math.abs(currentVelocity.z) < 0.02) currentVelocity.z = 0
 
     // Clamp velocity to max speed
     const velocityMagnitude = Math.sqrt(
@@ -80,8 +86,8 @@ export const GameLogic = ({ keysRef, playerRotation }: GameLogicProps) => {
       currentVelocity.z * currentVelocity.z
     )
 
-    if (velocityMagnitude > GAME_CONFIG.PLAYER_MAX_VELOCITY) {
-      const scale = GAME_CONFIG.PLAYER_MAX_VELOCITY / velocityMagnitude
+    if (velocityMagnitude > classConfig.MAX_VELOCITY) {
+      const scale = classConfig.MAX_VELOCITY / velocityMagnitude
       currentVelocity.x *= scale
       currentVelocity.z *= scale
     }
@@ -129,7 +135,10 @@ export const GameLogic = ({ keysRef, playerRotation }: GameLogicProps) => {
     })
 
     // === AUTO SHOOTING ===
-    if (now - lastShootTimeRef.current > GAME_CONFIG.AUTO_SHOOT_INTERVAL) {
+    // Sniper cannot shoot while moving
+    const canShoot = player.playerClass !== 'SNIPER' || !isMoving
+
+    if (canShoot && now - lastShootTimeRef.current > classConfig.AUTO_SHOOT_INTERVAL) {
       const direction = {
         x: Math.sin(playerRotation),
         y: 0,
@@ -142,7 +151,13 @@ export const GameLogic = ({ keysRef, playerRotation }: GameLogicProps) => {
         z: player.position.z + direction.z * 100,
       }
 
-      const bullet = createBullet(player.position, targetPosition)
+      const bullet = createBullet(player.position, targetPosition, {
+        speed: classConfig.BULLET_SPEED,
+        damage: classConfig.BULLET_DAMAGE,
+        knockbackForce: classConfig.BULLET_KNOCKBACK_FORCE,
+        canPenetrate: classConfig.BULLET_PENETRATION,
+        range: classConfig.BULLET_RANGE,
+      })
       bulletStore.addBullet(bullet)
       lastShootTimeRef.current = now
     }
@@ -156,17 +171,38 @@ export const GameLogic = ({ keysRef, playerRotation }: GameLogicProps) => {
       // Check collision with UPDATED position
       const updatedBullet = { ...bullet, position: newPosition }
       const hitMonster = checkBulletCollision(updatedBullet, monsters)
+
       if (hitMonster) {
+        // Skip if this monster was already hit by this bullet (for penetration)
+        if (bullet.hitMonsters.includes(hitMonster.id)) {
+          // Continue to next bullet without removing
+          return
+        }
+
         const newHealth = hitMonster.health - bullet.damage
-        bulletStore.removeBullet(bullet.id)
+
+        // If bullet can penetrate, mark monster as hit instead of removing bullet
+        if (bullet.canPenetrate) {
+          // Add monster to hit list
+          const updatedBullet = bulletStore.bullets.find(b => b.id === bullet.id)
+          if (updatedBullet) {
+            bulletStore.updateBullet(bullet.id, {
+              ...updatedBullet,
+              hitMonsters: [...updatedBullet.hitMonsters, hitMonster.id]
+            })
+          }
+        } else {
+          // Non-penetrating bullet: remove on hit
+          bulletStore.removeBullet(bullet.id)
+        }
+
+        // Apply damage and knockback
         monsterStore.damageMonster(hitMonster.id, bullet.damage)
 
         // Apply knockback to monster in bullet's direction
-        // Use bullet's direction vector (already normalized)
         const knockbackVelocityX = bullet.direction.x * bullet.knockbackForce
         const knockbackVelocityZ = bullet.direction.z * bullet.knockbackForce
 
-        // Add knockback to monster velocity
         monsterStore.updateMonsterVelocity(hitMonster.id, {
           x: hitMonster.velocity.x + knockbackVelocityX,
           y: 0,
@@ -177,10 +213,25 @@ export const GameLogic = ({ keysRef, playerRotation }: GameLogicProps) => {
           gameStore.addScore(calculateKillScore())
           monsterStore.removeMonster(hitMonster.id)
         }
+
+        // For penetrating bullets, continue checking other monsters
+        if (bullet.canPenetrate) {
+          return
+        }
+      }
+
+      // Check if bullet exceeded range
+      const travelDistance = Math.sqrt(
+        Math.pow(newPosition.x - bullet.spawnPosition.x, 2) +
+        Math.pow(newPosition.z - bullet.spawnPosition.z, 2)
+      )
+
+      if (travelDistance > bullet.range) {
+        bulletStore.removeBullet(bullet.id)
         return
       }
 
-      // Remove old bullets
+      // Remove old bullets (fallback safety)
       if (now - bullet.createdAt > GAME_CONFIG.BULLET_LIFETIME) {
         bulletStore.removeBullet(bullet.id)
       }

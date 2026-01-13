@@ -1,9 +1,7 @@
-import { useRef, useState, useEffect } from 'react'
+import { useRef, useState } from 'react'
 import { Canvas } from '@react-three/fiber'
-import { Physics } from '@react-three/rapier'
-import { usePlayerStore } from '@/entities/player'
 import { useGameStore } from '@/entities/game'
-import { GAME_CONFIG, CAMERA_CONFIG } from '@/shared/config/constants'
+import { CAMERA_CONFIG } from '@/shared/config/constants'
 import { PlayerMesh } from './components/PlayerMesh'
 import { MonsterList } from './components/MonsterList'
 import { BulletList } from './components/BulletList'
@@ -16,19 +14,9 @@ import { CameraController } from './components/CameraController'
 export const GameCanvas = () => {
   const keysRef = useRef<{ [key: string]: boolean }>({})
   const [playerRotation, setPlayerRotation] = useState(0)
-  const { setPlayer } = usePlayerStore()
   const { state } = useGameStore()
 
-  useEffect(() => {
-    setPlayer({
-      id: 'player',
-      position: { x: 0, y: 0, z: 0 },
-      rotation: 0,
-      health: GAME_CONFIG.PLAYER_MAX_HEALTH,
-      maxHealth: GAME_CONFIG.PLAYER_MAX_HEALTH,
-      velocity: { x: 0, y: 0, z: 0 },
-    })
-  }, [setPlayer])
+  // Player is created in CharacterSelectionScreen, not here
 
   return (
     <div className="w-full h-full">
@@ -45,11 +33,9 @@ export const GameCanvas = () => {
         <Lights />
         <Ground />
 
-        <Physics gravity={[0, 0, 0]}>
-          <PlayerMesh />
-          <MonsterList />
-          <BulletList />
-        </Physics>
+        <PlayerMesh />
+        <MonsterList />
+        <BulletList />
 
         {state === 'playing' && (
           <>

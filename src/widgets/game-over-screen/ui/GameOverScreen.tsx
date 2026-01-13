@@ -1,16 +1,20 @@
 import { useGameStore } from '@/entities/game'
 import { useMonsterStore } from '@/entities/monster'
 import { useBulletStore } from '@/entities/bullet'
+import { usePlayerStore } from '@/entities/player'
 
 export const GameOverScreen = () => {
   const { score, resetGame } = useGameStore()
   const { clearMonsters } = useMonsterStore()
   const { clearBullets } = useBulletStore()
+  const { setPlayer } = usePlayerStore()
 
   const handleRestart = () => {
+    // Clear all game state
+    setPlayer(null)
     clearMonsters()
     clearBullets()
-    resetGame()
+    resetGame() // Goes to character select screen
   }
 
   return (

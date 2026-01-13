@@ -3,7 +3,7 @@ import type { Player } from './types'
 
 interface PlayerStore {
   player: Player | null
-  setPlayer: (player: Player) => void
+  setPlayer: (player: Player | null) => void
   updateRotation: (rotation: number) => void
   updatePosition: (position: { x: number; y: number; z: number }) => void
   updateVelocity: (velocity: { x: number; y: number; z: number }) => void

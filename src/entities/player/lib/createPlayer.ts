@@ -1,13 +1,16 @@
-import type { Player } from '../model/types'
-import { GAME_CONFIG } from '@/shared/config/constants'
+import type { Player, PlayerClass } from '../model/types'
+import { GAME_CONFIG, PLAYER_CLASS_CONFIG } from '@/shared/config/constants'
 
-export const createPlayer = (): Player => {
+export const createPlayer = (playerClass: PlayerClass = 'ASSAULT'): Player => {
+  const classConfig = PLAYER_CLASS_CONFIG[playerClass]
+
   return {
     id: 'player',
     position: { ...GAME_CONFIG.PLAYER_SPAWN_POSITION },
     rotation: 0,
-    health: GAME_CONFIG.PLAYER_MAX_HEALTH,
-    maxHealth: GAME_CONFIG.PLAYER_MAX_HEALTH,
+    health: classConfig.MAX_HEALTH,
+    maxHealth: classConfig.MAX_HEALTH,
     velocity: { x: 0, y: 0, z: 0 },
+    playerClass,
   }
 }
