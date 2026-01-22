@@ -1,25 +1,64 @@
 import { useRef, useMemo } from 'react'
-import { Mesh } from 'three'
-import { usePlayerStore } from '@/entities/player'
-import { COLORS } from '@/shared/config/constants'
+import { Group } from 'three'
+import { useFrame } from '@react-three/fiber'
+import { usePlayerStore, AssaultSoldierModel } from '@/entities/player'
 import { HealthBar } from './HealthBar'
 
 export const PlayerMesh = () => {
-  const meshRef = useRef<Mesh>(null)
+  const groupRef = useRef<Group>(null)
   const player = usePlayerStore((state) => state.player)
 
-  // Memoize geometry args and positions
-  const geometryArgs = useMemo(() => [0.5, 1, 3] as [number, number, number], [])
-  const healthBarPosition = useMemo(() => [0, 1.5, 0] as [number, number, number], [])
+  // Track shooting state for animation
+  const isShootingRef = useRef(false)
+  const shootAnimationTimeRef = useRef(0)
+
+  // Memoize health bar position
+  const healthBarPosition = useMemo(() => [0, 2, 0] as [number, number, number], [])
+
+  // Track movement based on velocity
+  useFrame(() => {
+    if (!player) return
+
+    // Check if moving based on velocity magnitude
+    const velocityMagnitude = Math.sqrt(
+      player.velocity.x * player.velocity.x +
+      player.velocity.z * player.velocity.z
+    )
+
+    // Consider moving if velocity is above threshold
+    const isMoving = velocityMagnitude > 0.02
+
+    // Simulate shooting detection (auto-shoot is always on when playing)
+    // We'll pulse the shooting animation periodically
+    shootAnimationTimeRef.current += 0.016
+    if (shootAnimationTimeRef.current > 0.3) {
+      isShootingRef.current = !isMoving
+      shootAnimationTimeRef.current = 0
+    }
+  })
 
   if (!player) return null
 
+  // Calculate if currently moving
+  const velocityMagnitude = Math.sqrt(
+    player.velocity.x * player.velocity.x +
+    player.velocity.z * player.velocity.z
+  )
+  const isMoving = velocityMagnitude > 0.02
+
   return (
-    <group position={[player.position.x, player.position.y, player.position.z]}>
-      <mesh ref={meshRef} rotation-y={player.rotation}>
-        <coneGeometry args={geometryArgs} />
-        <meshStandardMaterial color={COLORS.PLAYER} />
-      </mesh>
+    <group
+      ref={groupRef}
+      position={[player.position.x, player.position.y, player.position.z]}
+    >
+      <group rotation-y={player.rotation}>
+        <AssaultSoldierModel
+          animation="idle"
+          isMoving={isMoving}
+          isShooting={!isMoving}
+          scale={0.5}
+        />
+      </group>
       <HealthBar
         position={healthBarPosition}
         health={player.health}

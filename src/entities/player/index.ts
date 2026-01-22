@@ -1,4 +1,7 @@
 export { usePlayerStore } from './model/player.store'
 export type { Player, PlayerClass } from './model/types'
+export type { CharacterAnimationType } from './model/animation-types'
 export { createPlayer } from './lib/createPlayer'
 export { calculatePlayerRotation } from './lib/updatePlayerRotation'
+export { useCharacterAnimation } from './lib/useCharacterAnimation'
+export { AssaultSoldierModel } from './ui/AssaultSoldierModel'
