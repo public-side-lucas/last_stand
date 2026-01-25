@@ -4,21 +4,51 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="94233cb7-780d-40bf-991d-cedb8570f232" name="Changes" comment="  feat: 유저 통과 못하도록 수정 및 충돌 시 딜리에 추가">
+    <list default="true" id="94233cb7-780d-40bf-991d-cedb8570f232" name="Changes" comment="feat 새로운 캐릭터 추가 및 선능 개선">
+      <change afterPath="$PROJECT_DIR$/.idea/prettier.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/shelf/Changes.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/shelf/Changes/shelved.patch" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.prettierignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.prettierrc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/entities/explosion/index.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/entities/explosion/model/explosion.store.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/entities/explosion/model/types.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/features/collision-detection/lib/checkExplosion.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/features/collision-detection/lib/processBulletCollisions.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/features/collision-detection/lib/processMortarExplosion.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/features/collision-detection/lib/processPlayerCollision.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/features/game-loop/index.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/features/game-loop/lib/executeGameActions.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/features/game-loop/model/types.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/features/monster-spawning/lib/updateMonsterMovement.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/features/player-movement/index.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/features/player-movement/lib/calculatePlayerMovement.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/features/player-movement/lib/parseInputState.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/features/shooting/lib/processAutoShooting.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/widgets/game-canvas/ui/components/DesertGround.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/widgets/game-canvas/ui/components/ExplosionList.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/widgets/game-canvas/ui/components/ExplosionMesh.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/widgets/game-canvas/ui/components/SandstormEffect.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/widgets/game-canvas/ui/components/VoxelCactus.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/widgets/game-canvas/ui/components/VoxelSlimeMonster.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/entities/bullet/lib/updateBulletPosition.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/entities/bullet/lib/updateBulletPosition.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/entities/bullet/model/types.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/entities/bullet/model/types.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/entities/monster/lib/__tests__/moveTowardsPlayer.test.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/entities/monster/lib/__tests__/moveTowardsPlayer.test.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/entities/monster/lib/createMonster.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/entities/monster/lib/createMonster.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/entities/monster/model/monster.store.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/entities/monster/model/monster.store.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/entities/monster/model/types.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/entities/monster/model/types.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/entities/player/lib/createPlayer.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/entities/player/lib/createPlayer.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/entities/player/model/types.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/entities/player/model/types.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/features/collision-detection/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/features/collision-detection/index.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/features/collision-detection/lib/__tests__/checkBulletCollision.test.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/features/collision-detection/lib/__tests__/checkBulletCollision.test.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/features/collision-detection/lib/checkBulletCollision.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/features/collision-detection/lib/checkBulletCollision.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/features/shooting/lib/__tests__/findNearestTarget.test.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/features/shooting/lib/__tests__/findNearestTarget.test.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/features/monster-spawning/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/features/monster-spawning/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/features/shooting/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/features/shooting/index.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/features/shooting/lib/createBullet.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/features/shooting/lib/createBullet.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/shared/config/constants.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/shared/config/constants.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/widgets/character-selection-screen/ui/CharacterSelectionScreen.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/widgets/character-selection-screen/ui/CharacterSelectionScreen.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/widgets/game-canvas/ui/GameCanvas.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/widgets/game-canvas/ui/GameCanvas.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/widgets/game-canvas/ui/components/GameLogic.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/widgets/game-canvas/ui/components/GameLogic.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/widgets/game-canvas/ui/components/Lights.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/widgets/game-canvas/ui/components/Lights.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/widgets/game-canvas/ui/components/MonsterMesh.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/widgets/game-canvas/ui/components/MonsterMesh.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -66,7 +96,7 @@
     "nodejs_interpreter_path": "node",
     "nodejs_package_manager_path": "npm",
     "npm.npm start.executor": "Debug",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "settings.editor.selected.configurable": "settings.javascript.prettier",
     "ts.external.directory.path": "/Users/storelink/Documents/byungmin/last_stand/node_modules/typescript/lib",
     "vue.rearranger.settings.migration": "true"
   }
@@ -143,7 +173,31 @@
       <option name="project" value="LOCAL" />
       <updated>1767528379964</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="  feat: add knockback physics system and improve collision detection&#10;&#10;  - Add velocity-based knockback for player and monsters&#10;  - Add weapon-specific knockback force to bullets&#10;  - Fix collision detection to use updated bullet positions&#10;  - Separate knockback from damage (always knockback, damage with invincibility)&#10;  - Fix monster movement speed bug caused by velocity accumulation&#10;  - Increase invincibility time (400ms → 800ms) and knockback force&#10;  - Reduce bullet collision distance (1.0 → 0.6) for accuracy&#10;  - Update all related tests with new properties">
+      <option name="closed" value="true" />
+      <created>1768093069391</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1768093069391</updated>
+    </task>
+    <task id="LOCAL-00006" summary="perf: optimize monster rendering using R3F Instances&#10;&#10;- Replaced individual meshes with &lt;Instance /&gt; to reduce draw calls&#10;- Integrated Instances within RigidBody for physics compatibility&#10;- Shared geometry and material resources in MonsterList">
+      <option name="closed" value="true" />
+      <created>1768308736261</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1768308736261</updated>
+    </task>
+    <task id="LOCAL-00007" summary=" feat: implement character class system with vision mechanics&#10;&#10;  Major Features:&#10;  - Add character selection screen (Assault/Sniper classes)&#10;  - Implement class-specific configurations (health, speed, damage, range, vision)&#10;  - Add bullet penetration system for Sniper class&#10;  - Add bullet range limitation per class&#10;  - Implement distance-based vision system with fog of war&#10;  - Add movement restriction for Sniper (cannot shoot while moving)&#10;&#10;  Technical Improvements:&#10;  - Remove Rapier physics engine (fix recursive use error, reduce bundle size by 67%)&#10;  - Replace RigidBody with simple group positioning&#10;  - Fix velocity damping preventing movement at MOVE_SPEED &lt; 0.01&#10;  - Fix restart button not resetting player state properly&#10;&#10;  Class Balance:&#10;  - Assault: High HP (10), short range (20), fast fire rate, short vision (15-30)&#10;  - Sniper: Low HP (7), long range (40), slow fire rate, wide vision (25-50), penetration">
+      <option name="closed" value="true" />
+      <created>1768312764386</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1768312764386</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -155,6 +209,10 @@
     <MESSAGE value="feat: 기능 리팩토링&#10;&#10;-  단일 책임 원칙 (SRP) - 각 훅이 하나의 관심사만 담당&#10;- 가독성 향상 - 코드 길이 65% 감소, 명확한 구조&#10;- 재사용성 - 각 훅을 독립적으로 재사용 가능&#10;- 테스트 용이성 - 각 기능을 개별적으로 테스트 가능&#10;- 유지보수성 - 버그 수정 및 기능 추가가 더 쉬워짐" />
     <MESSAGE value="  feat: implement player health and collision damage system&#10;&#10;  - 플레이어 상단에 체력바 추가 및 이동 시 위치 동기화&#10;  - 몬스터에 damage 속성 추가&#10;  - 충돌 시 몬스터 데미지만큼 플레이어 체력 감소&#10;  - 0.4초 무적 시간 추가로 연속 데미지 방지&#10;  - 체력 0 이하 시 게임 오버 처리" />
     <MESSAGE value="  feat: 유저 통과 못하도록 수정 및 충돌 시 딜리에 추가" />
-    <option name="LAST_COMMIT_MESSAGE" value="  feat: 유저 통과 못하도록 수정 및 충돌 시 딜리에 추가" />
+    <MESSAGE value="  feat: add knockback physics system and improve collision detection&#10;&#10;  - Add velocity-based knockback for player and monsters&#10;  - Add weapon-specific knockback force to bullets&#10;  - Fix collision detection to use updated bullet positions&#10;  - Separate knockback from damage (always knockback, damage with invincibility)&#10;  - Fix monster movement speed bug caused by velocity accumulation&#10;  - Increase invincibility time (400ms → 800ms) and knockback force&#10;  - Reduce bullet collision distance (1.0 → 0.6) for accuracy&#10;  - Update all related tests with new properties" />
+    <MESSAGE value="perf: optimize monster rendering using R3F Instances&#10;&#10;- Replaced individual meshes with &lt;Instance /&gt; to reduce draw calls&#10;- Integrated Instances within RigidBody for physics compatibility&#10;- Shared geometry and material resources in MonsterList" />
+    <MESSAGE value=" feat: implement character class system with vision mechanics&#10;&#10;  Major Features:&#10;  - Add character selection screen (Assault/Sniper classes)&#10;  - Implement class-specific configurations (health, speed, damage, range, vision)&#10;  - Add bullet penetration system for Sniper class&#10;  - Add bullet range limitation per class&#10;  - Implement distance-based vision system with fog of war&#10;  - Add movement restriction for Sniper (cannot shoot while moving)&#10;&#10;  Technical Improvements:&#10;  - Remove Rapier physics engine (fix recursive use error, reduce bundle size by 67%)&#10;  - Replace RigidBody with simple group positioning&#10;  - Fix velocity damping preventing movement at MOVE_SPEED &lt; 0.01&#10;  - Fix restart button not resetting player state properly&#10;&#10;  Class Balance:&#10;  - Assault: High HP (10), short range (20), fast fire rate, short vision (15-30)&#10;  - Sniper: Low HP (7), long range (40), slow fire rate, wide vision (25-50), penetration" />
+    <MESSAGE value="feat 새로운 캐릭터 추가 및 선능 개선" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat 새로운 캐릭터 추가 및 선능 개선" />
   </component>
 </project>

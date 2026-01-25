@@ -4,28 +4,52 @@ import { usePlayerStore } from '@/entities/player'
 import { useMonsterStore } from '@/entities/monster'
 import { useBulletStore } from '@/entities/bullet'
 import { useGameStore } from '@/entities/game'
-import { checkPlayerCollision } from '@/features/collision-detection'
-import { checkBulletCollision } from '@/features/collision-detection'
 import { updateBulletPosition } from '@/entities/bullet'
-import { moveTowardsPlayer } from '@/entities/monster'
-import { createBullet } from '@/features/shooting'
 import { createMonster } from '@/entities/monster'
-import { getSpawnPosition } from '@/features/monster-spawning'
-import { calculateKillScore } from '@/features/scoring'
 import { GAME_CONFIG, PLAYER_CLASS_CONFIG } from '@/shared/config/constants'
+
+// Feature imports (FSD 준수)
+import {
+  calculatePlayerMovement,
+  parseInputState,
+} from '@/features/player-movement'
+import {
+  getSpawnPosition,
+  calculateMonsterMovements,
+} from '@/features/monster-spawning'
+import { processAutoShooting } from '@/features/shooting'
+import {
+  processStandardBulletCollision,
+  processMortarExplosion,
+  processPlayerMonsterCollision,
+} from '@/features/collision-detection'
+import { executeGameActions } from '@/features/game-loop'
 
 interface GameLogicProps {
   keysRef: React.MutableRefObject<{ [key: string]: boolean }>
   playerRotation: number
 }
 
+/**
+ * 게임 로직 컴포넌트 (리팩토링됨)
+ *
+ * SOLID 원칙 적용:
+ * - SRP: 각 핸들러가 단일 책임을 가짐
+ * - OCP: 새 기능은 새 핸들러 추가로 확장
+ * - DIP: 액션 인터페이스를 통해 추상화에 의존
+ *
+ * FSD 원칙 적용:
+ * - widgets → features → entities → shared 레이어 준수
+ * - 각 feature는 독립적인 public API를 통해 접근
+ */
 export const GameLogic = ({ keysRef, playerRotation }: GameLogicProps) => {
+  // 시간 관련 refs
   const lastShootTimeRef = useRef(0)
   const lastSpawnTimeRef = useRef(0)
   const lastDamageTimeRef = useRef(0)
 
   useFrame((_, delta) => {
-    // Get latest state from stores on each frame
+    // === 상태 수집 ===
     const gameStore = useGameStore.getState()
     const playerStore = usePlayerStore.getState()
     const monsterStore = useMonsterStore.getState()
@@ -39,69 +63,23 @@ export const GameLogic = ({ keysRef, playerRotation }: GameLogicProps) => {
     const player = playerStore.player
     const monsters = monsterStore.monsters
     const bullets = bulletStore.bullets
-
-    // Get class-specific configuration
     const classConfig = PLAYER_CLASS_CONFIG[player.playerClass]
 
-    // === PLAYER MOVEMENT ===
-    let moveX = 0
-    let moveZ = 0
+    // === 1. 입력 파싱 (순수 함수) ===
+    const input = parseInputState(keysRef.current, playerRotation)
 
-    if (keysRef.current[GAME_CONFIG.MOVE_KEYS[0]]) moveZ -= 1
-    if (keysRef.current[GAME_CONFIG.MOVE_KEYS[1]]) moveX -= 1
-    if (keysRef.current[GAME_CONFIG.MOVE_KEYS[2]]) moveZ += 1
-    if (keysRef.current[GAME_CONFIG.MOVE_KEYS[3]]) moveX += 1
+    // === 2. 플레이어 이동 (순수 함수 + 부수효과) ===
+    const movementResult = calculatePlayerMovement({
+      player,
+      input,
+      deltaTime,
+      moveSpeed: classConfig.MOVE_SPEED,
+      maxVelocity: classConfig.MAX_VELOCITY,
+    })
+    playerStore.updatePosition(movementResult.position)
+    playerStore.updateVelocity(movementResult.velocity)
 
-    // Normalize diagonal movement
-    if (moveX !== 0 && moveZ !== 0) {
-      const length = Math.sqrt(moveX * moveX + moveZ * moveZ)
-      moveX /= length
-      moveZ /= length
-    }
-
-    // Check if player is moving (for sniper shooting restriction)
-    const isMoving = moveX !== 0 || moveZ !== 0
-
-    // === VELOCITY APPLICATION AND DAMPING ===
-    let currentVelocity = { ...player.velocity }
-
-    // Apply damping to velocity
-    currentVelocity.x *= GAME_CONFIG.PLAYER_VELOCITY_DAMPING
-    currentVelocity.z *= GAME_CONFIG.PLAYER_VELOCITY_DAMPING
-
-    // Add player input to velocity
-    if (moveX !== 0 || moveZ !== 0) {
-      const speed = classConfig.MOVE_SPEED * (deltaTime / 16)
-      currentVelocity.x += moveX * speed
-      currentVelocity.z += moveZ * speed
-    }
-
-    // Stop very small velocities to avoid floating point drift (only when no input)
-    if (moveX === 0 && Math.abs(currentVelocity.x) < 0.02) currentVelocity.x = 0
-    if (moveZ === 0 && Math.abs(currentVelocity.z) < 0.02) currentVelocity.z = 0
-
-    // Clamp velocity to max speed
-    const velocityMagnitude = Math.sqrt(
-      currentVelocity.x * currentVelocity.x +
-      currentVelocity.z * currentVelocity.z
-    )
-
-    if (velocityMagnitude > classConfig.MAX_VELOCITY) {
-      const scale = classConfig.MAX_VELOCITY / velocityMagnitude
-      currentVelocity.x *= scale
-      currentVelocity.z *= scale
-    }
-
-    // Apply velocity to position
-    const newPosition = {
-      x: player.position.x + currentVelocity.x,
-      y: player.position.y,
-      z: player.position.z + currentVelocity.z,
-    }
-    playerStore.updatePosition(newPosition)
-    playerStore.updateVelocity(currentVelocity)
-
-    // === MONSTER SPAWNING ===
+    // === 3. 몬스터 스폰 ===
     if (now - lastSpawnTimeRef.current > GAME_CONFIG.SPAWN_INTERVAL) {
       const position = getSpawnPosition()
       const monster = createMonster(position)
@@ -109,165 +87,67 @@ export const GameLogic = ({ keysRef, playerRotation }: GameLogicProps) => {
       lastSpawnTimeRef.current = now
     }
 
-    // === MONSTER MOVEMENT ===
-    monsters.forEach((monster) => {
-      // Apply velocity damping (for knockback)
-      let currentVelocity = { ...monster.velocity }
-      currentVelocity.x *= GAME_CONFIG.MONSTER_VELOCITY_DAMPING
-      currentVelocity.z *= GAME_CONFIG.MONSTER_VELOCITY_DAMPING
-
-      // Stop very small velocities
-      if (Math.abs(currentVelocity.x) < 0.01) currentVelocity.x = 0
-      if (Math.abs(currentVelocity.z) < 0.01) currentVelocity.z = 0
-
-      // Calculate normal movement towards player
-      const targetPosition = moveTowardsPlayer(monster, player.position, deltaTime)
-
-      // Apply knockback velocity on top of normal movement
-      const newPosition = {
-        x: targetPosition.x + currentVelocity.x,
-        y: monster.position.y,
-        z: targetPosition.z + currentVelocity.z,
-      }
-
-      monsterStore.updateMonsterPosition(monster.id, newPosition)
-      monsterStore.updateMonsterVelocity(monster.id, currentVelocity)
+    // === 4. 몬스터 이동 (순수 함수 + 부수효과) ===
+    const monsterMovements = calculateMonsterMovements(
+      monsters,
+      player.position,
+      deltaTime
+    )
+    monsterMovements.forEach(({ monsterId, position, velocity }) => {
+      monsterStore.updateMonsterPosition(monsterId, position)
+      monsterStore.updateMonsterVelocity(monsterId, velocity)
     })
 
-    // === AUTO SHOOTING ===
-    // Sniper cannot shoot while moving
-    const canShoot = player.playerClass !== 'SNIPER' || !isMoving
-
-    if (canShoot && now - lastShootTimeRef.current > classConfig.AUTO_SHOOT_INTERVAL) {
-      const direction = {
-        x: Math.sin(playerRotation),
-        y: 0,
-        z: Math.cos(playerRotation),
-      }
-
-      const targetPosition = {
-        x: player.position.x + direction.x * 100,
-        y: player.position.y,
-        z: player.position.z + direction.z * 100,
-      }
-
-      const bullet = createBullet(player.position, targetPosition, {
-        speed: classConfig.BULLET_SPEED,
-        damage: classConfig.BULLET_DAMAGE,
-        knockbackForce: classConfig.BULLET_KNOCKBACK_FORCE,
-        canPenetrate: classConfig.BULLET_PENETRATION,
-        range: classConfig.BULLET_RANGE,
-      })
-      bulletStore.addBullet(bullet)
-      lastShootTimeRef.current = now
+    // === 5. 자동 사격 (순수 함수 + 부수효과) ===
+    const shootingResult = processAutoShooting({
+      player,
+      playerRotation,
+      isMoving: input.isMoving,
+      now,
+      lastShootTime: lastShootTimeRef.current,
+    })
+    if (shootingResult.bullet) {
+      bulletStore.addBullet(shootingResult.bullet)
     }
+    lastShootTimeRef.current = shootingResult.newLastShootTime
 
-    // === BULLET UPDATES ===
+    // === 6. 총알 업데이트 및 충돌 처리 ===
     bullets.forEach((bullet) => {
-      // Update position
+      // 위치 업데이트
       const newPosition = updateBulletPosition(bullet, deltaTime)
       bulletStore.updateBulletPosition(bullet.id, newPosition)
 
-      // Check collision with UPDATED position
       const updatedBullet = { ...bullet, position: newPosition }
-      const hitMonster = checkBulletCollision(updatedBullet, monsters)
 
-      if (hitMonster) {
-        // Skip if this monster was already hit by this bullet (for penetration)
-        if (bullet.hitMonsters.includes(hitMonster.id)) {
-          // Continue to next bullet without removing
-          return
-        }
-
-        const newHealth = hitMonster.health - bullet.damage
-
-        // If bullet can penetrate, mark monster as hit instead of removing bullet
-        if (bullet.canPenetrate) {
-          // Add monster to hit list
-          const updatedBullet = bulletStore.bullets.find(b => b.id === bullet.id)
-          if (updatedBullet) {
-            bulletStore.updateBullet(bullet.id, {
-              ...updatedBullet,
-              hitMonsters: [...updatedBullet.hitMonsters, hitMonster.id]
-            })
-          }
-        } else {
-          // Non-penetrating bullet: remove on hit
-          bulletStore.removeBullet(bullet.id)
-        }
-
-        // Apply damage and knockback
-        monsterStore.damageMonster(hitMonster.id, bullet.damage)
-
-        // Apply knockback to monster in bullet's direction
-        const knockbackVelocityX = bullet.direction.x * bullet.knockbackForce
-        const knockbackVelocityZ = bullet.direction.z * bullet.knockbackForce
-
-        monsterStore.updateMonsterVelocity(hitMonster.id, {
-          x: hitMonster.velocity.x + knockbackVelocityX,
-          y: 0,
-          z: hitMonster.velocity.z + knockbackVelocityZ,
+      if (bullet.type === 'MORTAR') {
+        // 박격포 폭발 처리 (순수 함수 → 액션 실행)
+        const actions = processMortarExplosion({
+          bullet: updatedBullet,
+          monsters,
+          player,
+          now,
         })
-
-        if (newHealth <= 0) {
-          gameStore.addScore(calculateKillScore())
-          monsterStore.removeMonster(hitMonster.id)
-        }
-
-        // For penetrating bullets, continue checking other monsters
-        if (bullet.canPenetrate) {
-          return
-        }
-      }
-
-      // Check if bullet exceeded range
-      const travelDistance = Math.sqrt(
-        Math.pow(newPosition.x - bullet.spawnPosition.x, 2) +
-        Math.pow(newPosition.z - bullet.spawnPosition.z, 2)
-      )
-
-      if (travelDistance > bullet.range) {
-        bulletStore.removeBullet(bullet.id)
-        return
-      }
-
-      // Remove old bullets (fallback safety)
-      if (now - bullet.createdAt > GAME_CONFIG.BULLET_LIFETIME) {
-        bulletStore.removeBullet(bullet.id)
+        executeGameActions(actions)
+      } else {
+        // 일반 총알 충돌 처리 (순수 함수 → 액션 실행)
+        const actions = processStandardBulletCollision({
+          bullet: updatedBullet,
+          monsters,
+          now,
+        })
+        executeGameActions(actions)
       }
     })
 
-    // === PLAYER COLLISION ===
-    const hitMonster = checkPlayerCollision(monsters, player)
-
-    if (hitMonster) {
-      // ALWAYS apply knockback when colliding (regardless of invincibility)
-      const dx = player.position.x - hitMonster.position.x
-      const dz = player.position.z - hitMonster.position.z
-      const distance = Math.sqrt(dx * dx + dz * dz)
-
-      if (distance > 0) {
-        const knockbackVelocityX = (dx / distance) * GAME_CONFIG.PLAYER_KNOCKBACK_FORCE
-        const knockbackVelocityZ = (dz / distance) * GAME_CONFIG.PLAYER_KNOCKBACK_FORCE
-
-        // Set knockback velocity directly (override current velocity for immediate effect)
-        playerStore.updateVelocity({
-          x: knockbackVelocityX,
-          y: 0,
-          z: knockbackVelocityZ,
-        })
-      }
-
-      // Apply damage only if not in invincibility period
-      if (now - lastDamageTimeRef.current >= GAME_CONFIG.PLAYER_INVINCIBILITY_TIME) {
-        playerStore.damagePlayer(hitMonster.damage)
-        lastDamageTimeRef.current = now
-
-        if (player.health - hitMonster.damage <= 0) {
-          gameStore.setState('gameOver')
-        }
-      }
-    }
+    // === 7. 플레이어 충돌 처리 ===
+    const collisionResult = processPlayerMonsterCollision({
+      player,
+      monsters,
+      now,
+      lastDamageTime: lastDamageTimeRef.current,
+    })
+    executeGameActions(collisionResult.actions)
+    lastDamageTimeRef.current = collisionResult.newLastDamageTime
   })
 
   return null

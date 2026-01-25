@@ -65,6 +65,27 @@ export const CharacterSelectionScreen = () => {
               <div className="text-yellow-400">⚠ 정지 시에만 사격</div>
             </div>
           </button>
+
+          {/* Mortar Class */}
+          <button
+            onClick={() => handleClassSelect('MORTAR')}
+            className="bg-gray-800 p-6 rounded-lg border-2 border-gray-600 hover:border-orange-500 cursor-pointer transition-colors flex-1"
+          >
+            <div className="text-white text-center mb-4">
+              <h2 className="text-2xl font-bold mb-2">박격포병</h2>
+              <p className="text-sm text-gray-300">범위 공격 클래스</p>
+            </div>
+            <div className="space-y-2 text-sm text-white">
+              <div>• 체력: 7</div>
+              <div>• 이동 속도: 매우 느림</div>
+              <div>• 공격력: 2</div>
+              <div>• 발사 속도: 느림</div>
+              <div>• 사정거리: 중간 (15)</div>
+              <div>• 시야 범위: 넓음 (25~50)</div>
+              <div className="text-orange-400">💥 스플래시 데미지</div>
+              <div className="text-orange-400">💨 생존 시 넉백 효과</div>
+            </div>
+          </button>
         </div>
       </div>
     </div>

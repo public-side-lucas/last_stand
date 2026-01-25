@@ -9,10 +9,11 @@ export const PLAYER_CLASS_CONFIG = {
     BULLET_KNOCKBACK_FORCE: 0.1,
     BULLET_PENETRATION: false,
     BULLET_RANGE: 20, // Assault rifle short range
+    BULLET_TYPE: 'STANDARD',
     AUTO_SHOOT_INTERVAL: 50,
     VISION_RANGE_CLEAR: 15, // Clear vision distance
     VISION_RANGE_FADE: 25, // Start fading distance
-    VISION_RANGE_MAX: 30,  // Completely invisible distance
+    VISION_RANGE_MAX: 30, // Completely invisible distance
   },
   SNIPER: {
     MAX_HEALTH: 7,
@@ -23,10 +24,27 @@ export const PLAYER_CLASS_CONFIG = {
     BULLET_KNOCKBACK_FORCE: 0.5,
     BULLET_PENETRATION: true,
     BULLET_RANGE: 40, // Sniper long range
+    BULLET_TYPE: 'STANDARD',
     AUTO_SHOOT_INTERVAL: 800,
     VISION_RANGE_CLEAR: 25, // Clear vision distance (wider than assault)
     VISION_RANGE_FADE: 40, // Start fading distance
-    VISION_RANGE_MAX: 50,  // Completely invisible distance
+    VISION_RANGE_MAX: 50, // Completely invisible distance
+  },
+  MORTAR: {
+    MAX_HEALTH: 7,
+    MOVE_SPEED: 0.011,
+    MAX_VELOCITY: 0.15,
+    BULLET_SPEED: 1.2,
+    BULLET_DAMAGE: 2,
+    BULLET_KNOCKBACK_FORCE: 0.6,
+    BULLET_PENETRATION: false, // 박격포는 관통 안함 (폭발로 처리)
+    BULLET_RANGE: 10,
+    BULLET_TYPE: 'MORTAR',
+    AUTO_SHOOT_INTERVAL: 1500,
+    EXPLOSION_RADIUS: 5, // 폭발 반경
+    VISION_RANGE_CLEAR: 25,
+    VISION_RANGE_FADE: 40,
+    VISION_RANGE_MAX: 50,
   },
 } as const
 
@@ -47,6 +65,8 @@ export const GAME_CONFIG = {
   SPAWN_INTERVAL: 200,
   POINTS_PER_KILL: 100,
   MOVE_KEYS: ['KeyW', 'KeyA', 'KeyS', 'KeyD'],
+  GRAVITY: 9.8,
+  MORTAR_FLIGHT_TIME: 1.0,
 } as const
 
 export const CAMERA_CONFIG = {
@@ -63,4 +83,3 @@ export const COLORS = {
   BULLET: 0xffff00,
   GROUND: 0x808080,
 } as const
-

@@ -5,6 +5,7 @@ import type { Monster } from '@/entities/monster'
 describe('checkBulletCollision', () => {
   const createBullet = (x: number, z: number): Bullet => ({
     id: 'bullet-1',
+    type: 'STANDARD',
     position: { x, y: 0, z },
     spawnPosition: { x: 0, y: 0, z: 0 },
     direction: { x: 1, y: 0, z: 0 },

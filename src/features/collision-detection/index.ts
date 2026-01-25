@@ -1,2 +1,6 @@
 export { checkBulletCollision } from './lib/checkBulletCollision'
 export { checkPlayerCollision } from './lib/checkPlayerCollision'
+export { checkGroundCollision, getMonstersInExplosionRange } from './lib/checkExplosion'
+export { processStandardBulletCollision } from './lib/processBulletCollisions'
+export { processMortarExplosion } from './lib/processMortarExplosion'
+export { processPlayerMonsterCollision } from './lib/processPlayerCollision'
